@@ -17,10 +17,15 @@ async def bot_echo_all(message: types.Message, state: FSMContext):
     state_name = await state.get_state()
     text = [
         f'Эхо в состоянии {hcode(state_name)}',
-        'Содержание сообщения:',
-        hcode(message.text)
+        'Содержание сообщения:'
     ]
     await message.answer('\n'.join(text))
+    try:
+        await message.send_copy(chat_id=message.chat.id)
+    except TypeError:
+        await message.reply(text='Данный тип апдейтов не поддерживается '
+                                 'методом send_copy')
+
 
 
 def register_echo(dp: Dispatcher):
